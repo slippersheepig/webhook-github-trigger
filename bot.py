@@ -1,4 +1,4 @@
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Application, MessageHandler, filters
 import requests
 import os
 
@@ -27,7 +27,7 @@ def trigger_github_action():
         print(f"触发失败: {response.status_code}, {response.text}")
 
 # 处理接收到的Telegram消息
-def handle_message(update, context):
+async def handle_message(update, context):
     message = update.message.text
     if any(keyword in message for keyword in KEYWORDS):
         print("检测到关键词，触发GitHub Action...")
@@ -39,16 +39,14 @@ def main():
         print("请确保所有必要的环境变量都已设置")
         return
     
-    # 初始化Updater
-    updater = Updater(TELEGRAM_TOKEN, use_context=True)
-    
+    # 初始化Application
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
+
     # 添加消息处理器
-    dp = updater.dispatcher
-    dp.add_handler(MessageHandler(Filters.text, handle_message))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     
     # 启动Bot
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
