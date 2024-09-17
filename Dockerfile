@@ -6,4 +6,4 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "bot.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "bot:bot", "--timeout", "200", "--worker-class", "gevent"]
