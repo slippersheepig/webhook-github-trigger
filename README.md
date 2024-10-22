@@ -13,5 +13,6 @@ services:
       GITHUB_REPO: <username>/<repo>
       GITHUB_TOKEN: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       WORKFLOW_FILE: xxx.yml
+      SSH_HOST: www.example.com
     restart: always
 ```
